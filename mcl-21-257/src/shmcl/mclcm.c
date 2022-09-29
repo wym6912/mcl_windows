@@ -889,8 +889,9 @@ int main
       mcxErr(me, "-n argument leaves spurious option specifications")
 
    ;  srandom(mcxSeed(89315))
+#if (__linux__ ||  (__APPLE__ && __MACH__) )
    ;  signal(SIGALRM, mclSigCatch)
-
+#endif
    ;  if (dispatch_g)
       plexprefix = "dis"
    ;  else if (!write_modes || (write_modes & OUTPUT_STEPS))

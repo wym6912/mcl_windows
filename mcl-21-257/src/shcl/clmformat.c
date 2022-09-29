@@ -996,7 +996,11 @@ int main
          dn_fmt = mcxTingPrint(NULL, "fmt.%s", xf_cl->fn->str) 
       ;  if (chdir(dn_fmt->str))
          {  if (errno == ENOENT)
+#if ( __linux__ || (__APPLE__ && __MACH__) )
             {  if (mkdir(dn_fmt->str, 0777))
+#else
+            {  if (mkdir(dn_fmt->str))
+#endif
                   perror("mkdir error")
                ,  mcxDie(1, me, "Cannot create dir <%s>", dn_fmt->str)
             ;  else if (chdir(dn_fmt->str))

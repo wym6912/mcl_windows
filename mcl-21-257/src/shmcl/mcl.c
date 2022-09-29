@@ -117,9 +117,12 @@ int main
    ;  mcxstatus status        =  STATUS_OK
 
    ;  srandom(mcxSeed(315))
+#if (__linux__ ||  (__APPLE__ && __MACH__) )
    ;  signal(SIGALRM, mclSigCatch)
+
    ;  if (signal(SIGUSR1, mcxLogSig) == SIG_ERR)
       mcxErr(me, "cannot catch SIGUSR1!")
+#endif
 
    ;  mcxLogLevel =
       MCX_LOG_AGGR | MCX_LOG_MODULE | MCX_LOG_IO | MCX_LOG_GAUGE | MCX_LOG_WARN

@@ -23,7 +23,7 @@
 */
 
 unsigned long mcxSeed
-(  unsigned long seedlet
+(  unsigned long long seedlet
 )  ;
 
 
@@ -55,6 +55,11 @@ double mcxNormalSample
 ,  double stddev
 )  ;
 
+#if (_WIN32 || _WIN64)
+
+void srandom(unsigned long long x);
+int random();
+#endif
 
 #endif
 

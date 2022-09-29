@@ -9,7 +9,13 @@
 */
 
 #include <sys/types.h>
+#if ( __linux__ || (__APPLE__ && __MACH__) )
 #include <unistd.h>
+#else 
+#include <windows.h>
+#include <tlhelp32.h>
+#include <process.h>
+#endif
 #include <stdio.h>
 #include <time.h>
 
@@ -17,15 +23,60 @@
 #include "math.h"
 #include "types.h"
 
-unsigned long mcxSeed
-(  unsigned long i
-)
-   {  pid_t   p  = getpid()
-   ;  pid_t   pp = getppid()
+#if (_WIN32 || _WIN64)
+DWORD getppid()
+{
+    HANDLE hSnapshot = INVALID_HANDLE_VALUE;
+    PROCESSENTRY32 pe32;
+    DWORD ppid = 0, pid = GetCurrentProcessId();
 
-   ;  time_t  t  = time(NULL)
+    hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    if (hSnapshot == INVALID_HANDLE_VALUE) return -1;
 
-   ;  unsigned long  s  =     (p ^ p << 4 ^ p << 16 ^ p << 28)
+    ZeroMemory(&pe32, sizeof(pe32));
+    pe32.dwSize = sizeof(pe32);
+    if (!Process32First(hSnapshot, &pe32)) return -1;
+
+    do {
+        if (pe32.th32ProcessID == pid) {
+            ppid = pe32.th32ParentProcessID;
+            break;
+        }
+    } while (Process32Next(hSnapshot, &pe32));
+
+    CloseHandle(hSnapshot);
+
+    return ppid;
+}
+
+int getpid()
+{
+    return GetCurrentProcessId();
+}
+
+void srandom(unsigned long long x)
+{
+    long long id = (x >> 32) ^ x;
+    srand((unsigned int)id);
+}
+
+int random()
+{
+    return rand();
+}
+#endif
+
+unsigned long mcxSeed(unsigned long long i)
+{
+#if (__linux__ ||  (__APPLE__ && __MACH__) )
+    pid_t   p = getpid();
+    pid_t   pp = getppid();
+#else 
+    unsigned long p = getpid(), pp = getppid();
+#endif
+
+    time_t  t = time(NULL);
+    unsigned long  s = (p ^ p << 4 ^ p << 16 ^ p << 28)
                            ^  (pp ^ pp << 8 ^ pp << 24)
                            ^  (t ^ t << 12 ^ t << 20)
                            ^  (i ^ i << 3 ^ i << 23 ^ i << 26)

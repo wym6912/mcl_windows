@@ -58,14 +58,15 @@ int doIteration
 ,  int            type
 )  ;
 
-
+#if (__linux__ ||  (__APPLE__ && __MACH__) )
 void mclSigCatch
-(  int sig
+( int sig
 )
-   {  if (sig == SIGALRM)
-      abort_loop = 1
-;  }
-
+{
+    if (sig == SIGALRM)
+        abort_loop = 1;
+}
+#endif
 
 mclProcParam* mclProcParamNew
 (  void

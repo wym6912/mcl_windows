@@ -12,12 +12,6 @@ INSTALL=/mcl/
 
 # Now the rest of this script should have enough to run.
 
-mcltar=mcl-$mcl.tar.gz
-cfftar=cimfomfa-$cff.tar.gz
-
-# wget http://micans.org/mcl/dev/$mcltar
-# wget http://micans.org/mcl/dev/$cfftar
-
 if true; then
   thedir=cimfomfa-$cff
   ( cd $thedir
@@ -35,3 +29,6 @@ if true; then
     make install
   )
 fi
+
+# Copy necessary file in mingw64
+cp /mingw64/bin/libwinpthread-1.dll $INSTALL/bin/

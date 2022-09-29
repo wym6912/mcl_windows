@@ -33,3 +33,6 @@ if true; then
     make install
   )
 fi
+
+# Copy necessary file in mingw64
+cp /mingw64/bin/libwinpthread-1.dll $INSTALL/bin/

@@ -37,11 +37,13 @@
 #include <ctype.h>
 #include <signal.h>
 #include <time.h>
+#if ( __linux__ || (__APPLE__ && __MACH__) )
 #include <sys/mman.h>
+#endif
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-
 
 #include "mcx.h"
 

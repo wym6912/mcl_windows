@@ -18,5 +18,8 @@ mcxDispHook* mcxDispHookFp
 (  void
 )  ;
 
+#if (_WIN32 || _WIN64)
+#include "impala/io.h"
+#endif
 #endif
 

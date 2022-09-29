@@ -105,11 +105,11 @@ mclMatrix*  mclProcess
 ,  mclx**         limit      /* always write limit in limit */
 )  ;
 
-
+#if (__linux__ ||  (__APPLE__ && __MACH__) )
 void mclSigCatch
 (  int sig
 )  ;
-
+#endif
 
 void  mclDumpMatrix
 (  mclMatrix*     mx
